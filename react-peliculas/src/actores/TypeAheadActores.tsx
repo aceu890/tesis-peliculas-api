@@ -1,25 +1,27 @@
+import axios, { AxiosResponse } from "axios";
 import { ReactElement, useState } from "react";
-import { Typeahead } from "react-bootstrap-typeahead";
-import { actorPeliculaDTO } from "./actores.model";
+import { AsyncTypeahead } from "react-bootstrap-typeahead";
+import { urlActores } from "../utils/endpoints";
+import { actorPeliculaDTO } from './actores.model';
 
 export default function TypeAheadActores(props: typeAheadActoresProps) {
-
-    const actores: actorPeliculaDTO[] = [
-        {
-            id: 1, nombre: 'Felipe', personaje: '', foto: 'https://m.media-amazon.com/images/M/MV5BNzZiNTEyNTItYjNhMS00YjI2LWIwMWQtZmYwYTRlNjMyZTJjXkEyXkFqcGdeQXVyMTExNzQzMDE0._V1_UX214_CR0,0,214,317_AL_.jpg'
-        },
-        {
-            id: 2, nombre: 'Fernando', personaje: '', foto: 'https://m.media-amazon.com/images/M/MV5BMTQ1NTQwMTYxNl5BMl5BanBnXkFtZTYwMjA1MzY1._V1_UX214_CR0,0,214,317_AL_.jpg'
-        },
-        {
-            id: 3, nombre: 'Roberto', personaje: '', foto: 'https://m.media-amazon.com/images/M/MV5BMjI0MTg3MzI0M15BMl5BanBnXkFtZTcwMzQyODU2Mw@@._V1_UY317_CR10,0,214,317_AL_.jpg'
-        }
-    ]
+    const [estaCargando, setEstaCargando] = useState(false);
+    const [opciones, setOpciones] = useState<actorPeliculaDTO[]>([]);
 
     const seleccion: actorPeliculaDTO[] = []
 
     const [elementoArrastrado, setElementoArrastrado] = 
         useState<actorPeliculaDTO | undefined>(undefined)
+
+    function manejarBusqueda(query: string) {
+        setEstaCargando(true);
+
+        axios.get(`${urlActores}/buscarPorNombre/${query}`)
+            .then((respuesta: AxiosResponse<actorPeliculaDTO[]>) => {
+                setOpciones(respuesta.data);
+                setEstaCargando(false);
+            })
+    }
 
     function manejarDragStart(actor: actorPeliculaDTO) 
     {
@@ -49,16 +51,18 @@ export default function TypeAheadActores(props: typeAheadActoresProps) {
     return (
         <>
             <label>Actores</label>
-            <Typeahead
+            <AsyncTypeahead
                 id="typeahead"
                 onChange={actores => {
                     if (props.actores.findIndex(x => x.id === actores[0].id) === -1) {
                         props.onAdd([...props.actores, actores[0]]);
                     }
                 }}
-                options={actores}
+                options={opciones}
                 labelKey={actor => actor.nombre}
-                filterBy={['nombre']}
+                filterBy={() => true}
+                isLoading={estaCargando}
+                onSearch={manejarBusqueda}
                 placeholder="Escriba el nombre del actor..."
                 minLength={2}
                 flip={true}

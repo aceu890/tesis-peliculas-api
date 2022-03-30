@@ -1,9 +1,8 @@
 // PÁGINA DE COMPONENTE DE LISTADO DE PELICULA
 
-import { pelicula } from "./peliculas.model";
+import { peliculaDTO } from "./peliculas.model";
 import PeliculaIndividual from "./PeliculaIndividual";
 import css from "./ListadoPeliculas.module.css";
-import Cargando from "./../utils/Cargando";
 import ListadoGenerico from "./../utils/ListadoGenerico";
 
 // CONTROLA 3 ESTADOS DE LISTADO DE PELICULAS
@@ -20,5 +19,5 @@ export default function ListadoPeliculas(props: listadoPeliculasProps) {
 }
 
 interface listadoPeliculasProps {
-  peliculas?: pelicula[];
+  peliculas?: peliculaDTO[];
 }

@@ -14,6 +14,8 @@ import IndiceCines from './cines/IndiceCines';
 import CrearPeliculas from "./peliculas/CrearPeliculas";
 import EditarPeliculas from "./peliculas/EditarPeliculas";
 import FiltroPeliculas from "./peliculas/FiltroPeliculas";
+import DetallePelicula from "./peliculas/DetallePelicula";
+
 
 import RedireccionarALanding from './utils/RedireccionarALanding';
 
@@ -32,6 +34,7 @@ const rutas = [
     {path: '/cines/editar/:id(\\d+)', componente: EditarCines},
     {path: '/cines', componente: IndiceCines, exact: true},
 
+    {path: '/Pelicula/:id(\\d+)', componente: DetallePelicula},
     {path: '/Peliculas/crear', componente: CrearPeliculas},
     {path: '/Peliculas/editar/:id(\\d+)', componente: EditarPeliculas},
     {path: '/Peliculas/filtrar', componente: FiltroPeliculas},
