@@ -4,6 +4,9 @@ import axios, { AxiosResponse } from 'axios';
 import { urlPeliculas } from '../utils/endpoints';
 import { peliculaDTO } from './peliculas.model';
 import Cargando from '../utils/Cargando';
+import ReactMarkdown from 'react-markdown';
+import { coordenadaDTO } from '../utils/coordenadas.model';
+import Mapa from '../utils/Mapa';
 
 export default function DetallePelicula() {
     const {id}: any = useParams();
@@ -17,6 +20,18 @@ export default function DetallePelicula() {
             })  
     }, [id])
 // [] = dependencia vacia, para que la función corra solo una vez.
+
+    function transformarCoordenadas(): coordenadaDTO[] {
+        if (pelicula?.cines) {
+            const coordenadas = pelicula.cines.map(cine => {
+                return {lat: cine.latitud, 
+                        lng: cine.longitud, nombre: cine.nombre} as coordenadaDTO;
+            });
+            return coordenadas;
+        }
+
+        return [];
+    }
 
     function generarURLYoutubeEmbebido(url: any):string {
         if(!url){
@@ -65,9 +80,47 @@ export default function DetallePelicula() {
 
                         </iframe>
                     </div>:null}
-                </div>        
-            </div>
+                </div>  
 
-        </div> : <Cargando />
+                {pelicula.resumen ? 
+                <div style={{marginTop: '1rem'}}>
+                    <h3>Resumen</h3>
+                    <div>
+                        <ReactMarkdown>{pelicula.resumen}</ReactMarkdown>
+                    </div>
+
+                </div> : null}  
+
+                {pelicula.actores && pelicula.actores.length > 0 ?
+                        <div style={{ marginTop: '1rem' }}>
+                            <h3>Actores</h3>
+                            <div style={{ display: 'flex', flexDirection: 'column' }}>
+                                {pelicula.actores?.map(actor =>
+                                    <div key={actor.id} style={{ marginBottom: '2px' }}>
+                                        <img alt="foto" src={actor.foto}
+                                            style={{ width: '50px', verticalAlign: 'middle' }} />
+                                        <span style={{
+                                            display: 'inline-block', width: '200px',
+                                            marginLeft: '1rem'
+                                        }}>
+                                            {actor.nombre}
+                                        </span>
+                                        <span style={{
+                                            display: 'inline-block',
+                                            width: '45px'
+                                        }}>...</span>
+                                        <span>{actor.personaje}</span>
+                                    </div>)}
+                            </div>
+                        </div> : null}
+
+                    {pelicula.cines && pelicula.cines.length > 0 ?
+                        <div>
+                            <h2>Mostrándose en los siguiente cines</h2>
+                            <Mapa soloLectura={true} coordenadas={transformarCoordenadas()} />
+                        </div> : null}
+
+                </div>
+            </div> : <Cargando />
     )
 }

@@ -1,5 +1,5 @@
 import { MapContainer, Marker, TileLayer, useMapEvent } from "react-leaflet"
-import L from 'leaflet'
+import L, { Popup } from 'leaflet'
 import icon from 'leaflet/dist/images/marker-icon.png'
 import iconShadow from 'leaflet/dist/images/marker-shadow.png'
 import 'leaflet/dist/leaflet.css';
@@ -24,10 +24,11 @@ export default function Mapa(props: mapaProps){
             <TileLayer attribution="React Películas"
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
-            <ClickMapa setPunto={coordenadas => {
+            {props.soloLectura ? null : <ClickMapa setPunto={coordenadas => {
                 setCoordenadas([coordenadas]);
                 props.manejarClickMapa(coordenadas);
-            }} />
+            }} /> }
+
             {coordenadas.map(coordenada => <Marcador key={coordenada.lat + coordenada.lng} 
               {...coordenada}
             />)}
@@ -39,10 +40,14 @@ interface mapaProps {
     height: string;
     coordenadas: coordenadaDTO[];
     manejarClickMapa(coordenadas: coordenadaDTO): void;
+    soloLectura: boolean;
 }
 
 Mapa.defaultProps = {
-    height: '500px'
+    height: '500px',
+    soloLectura: false,
+    manejarClickMapa: () => {}
+
 }
 
 function ClickMapa(props: clickMapaProps){
@@ -56,9 +61,13 @@ interface clickMapaProps {
     setPunto(coordenadas: coordenadaDTO): void;
 }
 
-function Marcador(props: coordenadaDTO){
+function Marcador(props: coordenadaDTO) {
     return (
-        <Marker position={[props.lat, props.lng]} />
+        <Marker position={[props.lat, props.lng]}>
+            {props.nombre ? <Popup>
+                {props.nombre}
+            </Popup> : null}
+        </Marker>
     )
+   
 }
-
