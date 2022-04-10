@@ -1,10 +1,11 @@
-import { MapContainer, Marker, TileLayer, useMapEvent } from "react-leaflet"
-import L, { Popup } from 'leaflet'
+import { MapContainer, Marker, TileLayer, useMapEvent, Popup } from "react-leaflet"
+import L from "leaflet";
 import icon from 'leaflet/dist/images/marker-icon.png'
 import iconShadow from 'leaflet/dist/images/marker-shadow.png'
 import 'leaflet/dist/leaflet.css';
 import {coordenadaDTO} from './coordenadas.model'
 import { useState } from "react";
+
 
 let DefaultIcon = L.icon({
     iconUrl: icon,
@@ -70,4 +71,4 @@ function Marcador(props: coordenadaDTO) {
         </Marker>
     )
    
-}
+ }

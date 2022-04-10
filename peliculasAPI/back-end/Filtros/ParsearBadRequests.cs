@@ -1,10 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace PeliculasAPI.Filtros
 {
@@ -12,11 +11,13 @@ namespace PeliculasAPI.Filtros
     {
         public void OnActionExecuted(ActionExecutedContext context)
         {
-            if (context.Result is null)
+            var casteoResult = context.Result as IStatusCodeActionResult;
+            if (casteoResult == null)
             {
                 return;
             }
-            var codigoEstatus = (context.Result as IStatusCodeActionResult).StatusCode;
+
+            var codigoEstatus = casteoResult.StatusCode;
             if (codigoEstatus == 400)
             {
                 var respuesta = new List<string>();
@@ -24,6 +25,13 @@ namespace PeliculasAPI.Filtros
                 if (resultadoActual.Value is string)
                 {
                     respuesta.Add(resultadoActual.Value.ToString());
+                }
+                else if (resultadoActual.Value is IEnumerable<IdentityError> errores)
+                {
+                    foreach (var error in errores)
+                    {
+                        respuesta.Add(error.Description);
+                    }
                 }
                 else
                 {

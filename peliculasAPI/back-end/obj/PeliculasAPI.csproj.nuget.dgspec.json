@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Doko\\Desktop\\primera app en react - 3\\peliculasAPI\\back-end\\PeliculasAPI.csproj": {}
+    "C:\\Users\\Doko\\Desktop\\primera app en react - 3 ✔ - copia (2)\\peliculasAPI\\back-end\\PeliculasAPI.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Doko\\Desktop\\primera app en react - 3\\peliculasAPI\\back-end\\PeliculasAPI.csproj": {
+    "C:\\Users\\Doko\\Desktop\\primera app en react - 3 ✔ - copia (2)\\peliculasAPI\\back-end\\PeliculasAPI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Doko\\Desktop\\primera app en react - 3\\peliculasAPI\\back-end\\PeliculasAPI.csproj",
+        "projectUniqueName": "C:\\Users\\Doko\\Desktop\\primera app en react - 3 ✔ - copia (2)\\peliculasAPI\\back-end\\PeliculasAPI.csproj",
         "projectName": "PeliculasAPI",
-        "projectPath": "C:\\Users\\Doko\\Desktop\\primera app en react - 3\\peliculasAPI\\back-end\\PeliculasAPI.csproj",
+        "projectPath": "C:\\Users\\Doko\\Desktop\\primera app en react - 3 ✔ - copia (2)\\peliculasAPI\\back-end\\PeliculasAPI.csproj",
         "packagesPath": "C:\\Users\\Doko\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Doko\\Desktop\\primera app en react - 3\\peliculasAPI\\back-end\\obj\\",
+        "outputPath": "C:\\Users\\Doko\\Desktop\\primera app en react - 3 ✔ - copia (2)\\peliculasAPI\\back-end\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Doko\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -49,6 +49,10 @@
               "version": "[12.8.1, )"
             },
             "Microsoft.AspNetCore.Authentication.JwtBearer": {
+              "target": "Package",
+              "version": "[5.0.5, )"
+            },
+            "Microsoft.AspNetCore.Identity.EntityFrameworkCore": {
               "target": "Package",
               "version": "[5.0.5, )"
             },

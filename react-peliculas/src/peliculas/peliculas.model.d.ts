@@ -1,5 +1,7 @@
 // ? = opcional
 export interface peliculaDTO{
+    promedioVoto: string | number | boolean | {} | ReactElement<any, string | JSXElementConstructor<any>> | ReactNodeArray | ReactPortal | null | undefined;
+    votoUsuario: number;
     id: number;
     titulo: string;
     poster: string;
@@ -10,6 +12,8 @@ export interface peliculaDTO{
     cines: cineDTO[];
     generos: generoDTO[];
     actores: actorPeliculaDTO[];
+    votoUsuario?: number;
+    promedioVoto?:number;
 }
 
 export interface peliculaCreacionDTO {
@@ -26,11 +30,20 @@ export interface peliculaCreacionDTO {
 }
 
 export interface landingPageDTO {
-    enCartelera?: peliculaDTO[];
+    enCines?: peliculaDTO[];
     proximosEstrenos?: peliculaDTO[];
 }
 
 export interface peliculasPostGetDTO {
     generos: generoDTO[];
     cines: cineDTO[]
+}
+
+export interface peliculasPutGetDTO {
+    pelicula: peliculaDTO;
+    generosSeleccionados: generoDTO[];
+    generosNoSeleccionados: generoDTO[];
+    cinesSeleccionados: cineDTO[];
+    cinesNoSeleccionados: cineDTO[];
+    actores: actorPeliculaDTO[];
 }

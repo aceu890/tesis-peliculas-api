@@ -1,0 +1,1 @@
+podemos navegar a otras páginas con código javascript y useHistory, con puro código js.

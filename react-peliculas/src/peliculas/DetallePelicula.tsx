@@ -1,31 +1,32 @@
 import { useParams, Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import axios, { AxiosResponse } from 'axios';
-import { urlPeliculas } from '../utils/endpoints';
-import { peliculaDTO } from './peliculas.model';
 import Cargando from '../utils/Cargando';
 import ReactMarkdown from 'react-markdown';
+import Swal from 'sweetalert2';
 import { coordenadaDTO } from '../utils/coordenadas.model';
+import { urlPeliculas, urlRatings } from '../utils/endpoints';
 import Mapa from '../utils/Mapa';
+import Rating from '../utils/Rating';
+import { peliculaDTO } from './peliculas.model';
 
 export default function DetallePelicula() {
-    const {id}: any = useParams();
+    const { id }: any = useParams();
     const [pelicula, setPelicula] = useState<peliculaDTO>();
 
     useEffect(() => {
-          axios.get(`${urlPeliculas}/${id}`)
+        axios.get(`${urlPeliculas}/${id}`)
             .then((respuesta: AxiosResponse<peliculaDTO>) => {
                 respuesta.data.fechaLanzamiento = new Date(respuesta.data.fechaLanzamiento);
                 setPelicula(respuesta.data);
-            })  
+            })
     }, [id])
-// [] = dependencia vacia, para que la función corra solo una vez.
 
-    function transformarCoordenadas(): coordenadaDTO[] {
-        if (pelicula?.cines) {
+    function transformarCoordenadas(): coordenadaDTO[]{
+        if (pelicula?.cines){
             const coordenadas = pelicula.cines.map(cine => {
                 return {lat: cine.latitud, 
-                        lng: cine.longitud, nombre: cine.nombre} as coordenadaDTO;
+                    lng: cine.longitud, nombre: cine.nombre} as coordenadaDTO;
             });
             return coordenadas;
         }
@@ -33,8 +34,8 @@ export default function DetallePelicula() {
         return [];
     }
 
-    function generarURLYoutubeEmbebido(url: any):string {
-        if(!url){
+    function generarURLYoutubeEmbebido(url: any): string {
+        if (!url) {
             return '';
         }
 
@@ -47,51 +48,59 @@ export default function DetallePelicula() {
         return `https://www.youtube.com/embed/${video_id}`
     }
 
-
+    async function onVote(voto: number){
+       await axios.post(urlRatings, {puntuacion: voto, peliculaId: id})
+       Swal.fire({icon: 'success', title: 'Voto recibido'});
+    }
+    
     return (
-        pelicula ? 
-        <div style={{display: 'flex'}}>
-            <div>
-                <h2>{pelicula.titulo} ({pelicula.fechaLanzamiento.getFullYear()})</h2>
-                {pelicula.generos?.map(genero => 
-                <Link key={genero.id} style={{marginRight: '5px'}}
-                className="btn btn-primary btn-sm rounded-pill"
-                to={`/peliculas/filtrar?generoId=${genero.id}`}
-                >{genero.nombre}</Link>)
-                }   
-                | {pelicula.fechaLanzamiento.toDateString()}
-                <div style={{display: 'flex', marginTop: '1rem'}}>
-                    <span style={{display:'inline-block', marginRight: '1rem'}}>
-                        <img src={pelicula.poster}
-                         style={{width: '225px', height:'315px'}} 
-                         alt="poster"
-                         />
-                    </span>
-                    {pelicula.trailer ? <div>
-                        <iframe
-                            title="youtube-trailer"
-                            width="560"
-                            height="315"
-                            src={generarURLYoutubeEmbebido(pelicula.trailer)}
-                            frameBorder={0}
-                            allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-                            allowFullScreen
-                        >
+        pelicula ?
+            <div style={{ display: 'flex' }}>
+                <div>
+                    <h2>{pelicula.titulo} ({pelicula.fechaLanzamiento.getFullYear()})</h2>
+                    {pelicula.generos?.map(genero =>
+                        <Link key={genero.id} style={{ marginRight: '5px' }}
+                            className="btn btn-primary btn-sm rounded-pill"
+                            to={`/peliculas/filtrar?generoId=${genero.id}`}
+                        >{genero.nombre}</Link>)
+                    }
+                    | {pelicula.fechaLanzamiento.toDateString()}
+                    | Voto promedio: {pelicula.promedioVoto} 
+                    | Tu voto: 
+                    <Rating maximoValor={5} 
+                    valorSeleccionado={pelicula.votoUsuario!} onChange={onVote} />
+                    
+                    <div style={{ display: 'flex', marginTop: '1rem' }}>
+                        <span style={{ display: 'inline-block', marginRight: '1rem' }}>
+                            <img src={pelicula.poster}
+                                style={{ width: '225px', height: '315px' }}
+                                alt="poster"
+                            />
+                        </span>
+                        {pelicula.trailer ? <div>
+                            <iframe
+                                title="youtube-trailer"
+                                width="560"
+                                height="315"
+                                src={generarURLYoutubeEmbebido(pelicula.trailer)}
+                                frameBorder={0}
+                                allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                                allowFullScreen
+                            >
 
-                        </iframe>
-                    </div>:null}
-                </div>  
-
-                {pelicula.resumen ? 
-                <div style={{marginTop: '1rem'}}>
-                    <h3>Resumen</h3>
-                    <div>
-                        <ReactMarkdown>{pelicula.resumen}</ReactMarkdown>
+                            </iframe>
+                        </div> : null}
                     </div>
 
-                </div> : null}  
+                    {pelicula.resumen ?
+                        <div style={{ marginTop: '1rem' }}>
+                            <h3>Resumen</h3>
+                            <div>
+                                <ReactMarkdown>{pelicula.resumen}</ReactMarkdown>
+                            </div>
+                        </div> : null}
 
-                {pelicula.actores && pelicula.actores.length > 0 ?
+                    {pelicula.actores && pelicula.actores.length > 0 ?
                         <div style={{ marginTop: '1rem' }}>
                             <h3>Actores</h3>
                             <div style={{ display: 'flex', flexDirection: 'column' }}>

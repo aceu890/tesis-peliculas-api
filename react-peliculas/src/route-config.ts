@@ -18,26 +18,34 @@ import DetallePelicula from "./peliculas/DetallePelicula";
 
 
 import RedireccionarALanding from './utils/RedireccionarALanding';
+import Registro from "./auth/Registro";
+import Login from "./auth/Login";
+
+import IndiceUsuarios from "./auth/IndiceUsuarios";
 
 
 
 const rutas = [
-    {path: '/generos/crear', componente: CrearGenero},
-    {path: '/generos/editar/:id(\\d+)', componente: EditarGenero},
-    {path: '/generos', componente: IndiceGeneros, exact: true},
+    {path: '/generos/crear', componente: CrearGenero, esAdmin: true},
+    {path: '/generos/editar/:id(\\d+)', componente: EditarGenero, esAdmin: true},
+    {path: '/generos', componente: IndiceGeneros, exact: true, esAdmin: true},
 
-    {path: '/actores/crear', componente: CrearActores},
-    {path: '/actores/editar/:id(\\d+)', componente: EditarActores},
-    {path: '/actores', componente: IndiceActores, exact: true},
+    {path: '/actores/crear', componente: CrearActores, esAdmin: true},
+    {path: '/actores/editar/:id(\\d+)', componente: EditarActores, esAdmin: true},
+    {path: '/actores', componente: IndiceActores, exact: true, esAdmin: true},
 
-    {path: '/cines/crear', componente: CrearCines},
-    {path: '/cines/editar/:id(\\d+)', componente: EditarCines},
-    {path: '/cines', componente: IndiceCines, exact: true},
+    {path: '/cines/crear', componente: CrearCines, esAdmin: true},
+    {path: '/cines/editar/:id(\\d+)', componente: EditarCines, esAdmin: true},
+    {path: '/cines', componente: IndiceCines, exact: true, esAdmin: true},
 
     {path: '/Pelicula/:id(\\d+)', componente: DetallePelicula},
-    {path: '/Peliculas/crear', componente: CrearPeliculas},
-    {path: '/Peliculas/editar/:id(\\d+)', componente: EditarPeliculas},
+    {path: '/Peliculas/crear', componente: CrearPeliculas, esAdmin: true},
+    {path: '/Peliculas/editar/:id(\\d+)', componente: EditarPeliculas, esAdmin: true},
     {path: '/Peliculas/filtrar', componente: FiltroPeliculas},
+
+    {path: '/registro', componente: Registro},
+    {path: '/login', componente: Login},
+    {path: '/usuarios', componente: IndiceUsuarios, esAdmin: true},
 
 
     {path: '/', componente: LandingPage, exact: true},
